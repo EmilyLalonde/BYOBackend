@@ -1,4 +1,5 @@
 const express = require('express');
+const environment = process.env.NODE_ENV || 'development';
 const app = express();
 app.use(express.json());
 app.set('port', 3000);
