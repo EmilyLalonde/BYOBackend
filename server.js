@@ -1,6 +1,6 @@
 const express = require('express');
-const environment = process.env.NODE_ENV || 'development';
 const app = express();
+const environment = process.env.NODE_ENV || 'development';
 app.use(express.json());
 app.set('port', process.env.PORT || 3000);
 app.listen(app.get('port'), () => {
