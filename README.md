@@ -13,10 +13,10 @@ https://github.com/EmilyLalonde/BYOBackend/projects/1
 ### 'get' Endpoints
 | Url | Verb  | Options  | Sample Response  |
 |---|---|---|---|
-| `/api/v1/directors` | GET | Not needed | An array of directors: `[{"id": 1, "name": "David Lynch", "country": "USA", "age": 73` |
-| `/api/v1/directors/:id` | GET | Not needed | Specific director: `[{"id": 1, "name": "David Lynch", "country": "USA", "age": 73` |
-| `/api/v1/movies` | GET | Not needed | An array of movies: `[{"id": 1, "name": "Eraserhead", "releaseDate": 1997, "director": "David Lynch"` |
-| `/api/v1/movies` | GET | Not needed | Specific movie: `[{"id": 1, "name": "Eraserhead", "releaseDate": 1997, "director": "David Lynch"` |
+| `/api/v1/directors` | GET | Not needed | An array of directors: `[{"id": 1, "name": "David Lynch", "country": "USA", "age": 73}]` |
+| `/api/v1/directors/:id` | GET | Not needed | Specific director: `[{"id": 1, "name": "David Lynch", "country": "USA", "age": 73}]` |
+| `/api/v1/movies` | GET | Not needed | An array of movies: `[{"id": 1, "name": "Eraserhead", "releaseDate": 1997, "director": "David Lynch"}]` |
+| `/api/v1/movies` | GET | Not needed | Specific movie: `[{"id": 1, "name": "Eraserhead", "releaseDate": 1997, "director": "David Lynch"}]` |
 
 ### 'post' Endpoints
 | Url | Verb  | Options  | Sample Response  |
