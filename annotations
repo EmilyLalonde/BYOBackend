@@ -1,0 +1,122 @@
+const express = require('express'); // requires express
+const app = express(); // variable that uses express so that we can use express methods on 'app'
+const environment = process.env.NODE_ENV || 'development'; // establishes the environment and whether it is production or development
+const configuration = require('./knexfile')[environment]; // configures the environment
+const database = require('knex')(configuration); //connects to postgres
+
+
+app.use(express.json()); // puts all the data in json format
+app.set('port', process.env.PORT || 3000); // sets the port where we can access our site, if that port is busy it can be redirected
+
+
+app.listen(app.get('port'), () => { // listens for connections on the specific port
+  console.log(`App is listening on port ${app.get('port')}`); // returns text in the terminal to confirm that port is running
+});
+
+app.get('/', (request, response)=> { // sets the endpoint url
+  response.send('Please enter a valid route'); //
+});
+
+app.get('/api/v1/directors', (request, response) => { // sets the endpoint url for directors
+  database('directors').select() // selects the directors database
+  .then(directors => { 
+    response.status(200).json(directors); // If request successfull, return status code 200 and the directors in json format
+  })
+  .catch(err => { // If the user is not connected to the internet or server is down
+    response.status(500).json(err) // return status code 500 with the appropriate error
+  })
+})
+
+app.get('api/v1/directors/:id', (response, request) => { // sets the endpoint url for a specific director
+  database('director').where('id', request.params.id).select() // selects the directors database where the id in the url matches the directors id that was selected
+  .then(director => { 
+    if(director.length) { // If there is a director
+      response.status(200).json(director) // request successfull, return status code 200 and the director in json format
+    } else {
+      response.status(404).json({ // return not found error in json format
+        error: 'Cannot find that director' // message that is displayed with this specific error
+      })
+    }
+  })
+  .catch(err => { // If the user is not connected to the internet or server is down
+    response.status(500).json(err) // return status code 500 with the appropriate error
+  })
+})
+
+app.get('/api/v1/movies', (request, response) => { // sets the endpoint url for movies
+  database('movies').select() // selects the movies database
+  .then(movies => { 
+    response.status(200).json(movies) // If request successfull, return status code 200 and the movies in json format
+  })
+  .catch(err => { // If the user is not connected to the internet or server is down
+    resopnse.status(500).json(err) // return status code 500 with the appropriate error
+  })
+})
+
+app.get('api/v1/movies/:id', (response, request) => { // sets the endpoint url for a specific movie
+  database('movies').where('id', request.params.id).select() //  selects the directors database where the id in the url matches the movies id that was selected
+  .then(movie => { 
+    if(movie.length) { // If there is a movie
+      response.status(200).json(movie) // request successfull, return status code 200 and the movie in json format
+    } else {
+      response.status(404).json({ // return not found error in json format
+        error: 'Cannot find that movie' // message that is displayed with this specific error
+      })
+    }
+  })
+  .catch(err => { // If the user is not connected to the internet or server is down
+    response.status(500).json(err) // return status code 500 with the appropriate error
+  })
+})
+
+app.post('/api/v1/directors', (request, response) => { // sets the endpoint url to create new director
+  const director = request.body // variable for the request body
+
+  for(let requiredParameter of ['name', 'country', 'age']) { // required parameters to successfully create a new director
+    if(!director[requiredParameter]) { // checks if any required parameters are missing
+      return response // return response
+      .status(422) // Unprocessable Entity, there was a required param missing
+      .send({error: 'Unexpected format'}) // error that the user recieves
+    }
+  }
+  database('directors').insert(director, id) // connects to directors database and inserts the new director with a unique id
+  .then(director => { 
+    response.status(201).json({id: director[0]}) // successful creation response with new director id
+  }) 
+  .catch(err => { // If the user is not connected to the internet or server is down
+    response.status(500).json(err) // return status code 500 with the appropriate error
+  })
+})
+
+app.post('/api/v1/movies', (request, response) => { // sets the endpoint url to create a new movie
+  const movie = request.body // variable for the request body
+
+  for(let requiredParameter of ['name', 'releaseDate', 'director']) { // required parameters to successfully create a new movie
+    if(!movie[requiredParameter]) { // checks if any required parameters are missing
+      return response // return response
+      .status(422) // Unprocessable Entity, there was a required param missing
+      .send({error: 'Unexpected format'}) // error that the user recieves
+    }
+  }
+  database('movies').insert(movie, id) // connects to movies database and inserts the new movie with a unique id
+  .then(movie => { 
+    response.status(201).json({id: movie[0]}) // successful creation response with new movie id
+  }) 
+  .catch(err => { // If the user is not connected to the internet or server is down
+    response.status(500).json(err) // return status code 500 with the appropriate error
+  })
+})
+
+app.delete('api/v1/directors/:id', (request, response) => { // sets the endpoint url to delete a specific director
+  database('directors').where('id', request.params.id).del() // connect to the directors database and where the id matches the id in the url, delete that director
+  .then(response => { 
+  if(response) { 
+    response.status(200).send('Director has been deleted') // return if the success is successful, send this message to to user
+  } else { //otherwise
+    response.status(404).send('Delete not completed') // return not found status code with message to the user
+  }
+  })
+  .catch(err => { // If the user is not connected to the internet or server is down
+    response(500).json(err) // return status code 500 with the appropriate error
+  })
+})
