@@ -1,5 +1,15 @@
 # BYOBackend
 
+#### This Project Utilizes:
+* Node.js
+* Express
+* Knex
+* Postgres
+
+
+### Story Board:
+https://github.com/EmilyLalonde/BYOBackend/projects/1
+
 ### 'get' Endpoints
 | Url | Verb  | Options  | Sample Response  |
 |---|---|---|---|
