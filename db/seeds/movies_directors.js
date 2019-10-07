@@ -33,14 +33,14 @@ exports.seed = function(knex) {
     directors.forEach(director => {
       directorProms.push(createDirectors(knex, director))
     })
-    return Promise.all(directorProms)
+    return Promise.all(directorProms);
   })
   .then(() => {
     const movieProms = [];
     movies.forEach(movie => {
       movieProms.push(createMovie(knex, movie))
     })
-    return Promise.all(movieProms)
+    return Promise.all(movieProms);
   })
   .catch(err => console.log(`Error seeding data: ${err}`))
 }
